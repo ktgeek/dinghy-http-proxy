@@ -1,3 +1,11 @@
+# The KTG Edition
+
+This is a fork of [codekitchen's original dinghy-http-proxy](https://github.com/codekitchen/dinghy) with minor changes
+to update some dependencies, and make the build portable beyond x86_64. (My main need was to get arm64 going.)
+
+Dinghy itself is no longer maintained, but this proxy is still useful outside of dinghy. Most people should ignore the
+dinghy parts of the rest of this documentation and skip down to the Using Outside of Dinghy section.
+
 # Dinghy HTTP Proxy
 
 [![Docker Automated build](https://img.shields.io/docker/automated/codekitchen/dinghy-http-proxy.svg)](https://hub.docker.com/r/codekitchen/dinghy-http-proxy/)

@@ -1,12 +1,12 @@
 FROM golang:1.16 as builder
-WORKDIR /go/src/github.com/codekitchen/dinghy-http-proxy
+WORKDIR /go/src/github.com/ktgeek/dinghy-http-proxy
 COPY join-networks.go .
-RUN GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go mod init
-RUN GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go get -v github.com/fsouza/go-dockerclient
-RUN GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -v -o join-networks
+RUN GOOS=linux CGO_ENABLED=0 go mod init
+RUN GOOS=linux CGO_ENABLED=0 go get -v github.com/fsouza/go-dockerclient
+RUN GOOS=linux CGO_ENABLED=0 go build -v -o join-networks
 
 FROM jwilder/nginx-proxy:alpine
-LABEL Author="Brian Palmer <brian@codekitchen.net>"
+LABEL Author="Keith Garner <kgarner@kgarner.com>"
 
 RUN apk upgrade --no-cache \
  && apk add --no-cache --virtual=run-deps \
@@ -17,7 +17,7 @@ RUN apk upgrade --no-cache \
       /var/cache/apk/* \
       /var/tmp/*
 
-COPY --from=builder /go/src/github.com/codekitchen/dinghy-http-proxy/join-networks /app/join-networks
+COPY --from=builder /go/src/github.com/ktgeek/dinghy-http-proxy/join-networks /app/join-networks
 
 COPY Procfile /app/
 
