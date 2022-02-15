@@ -1,17 +1,12 @@
-# The KTG Edition
+# Dinghy HTTP Proxy: The KTG Edition
 
 This is a fork of [codekitchen's original dinghy-http-proxy](https://github.com/codekitchen/dinghy) with minor changes
 to update some dependencies, and make the build portable beyond x86_64. (My main need was to get arm64 going.)
 
-Dinghy itself is no longer maintained, but this proxy is still useful outside of dinghy. Most people should ignore the
-dinghy parts of the rest of this documentation and skip down to the Using Outside of Dinghy section.
-
+Dinghy itself is no longer maintained, but this proxy is still useful outside of dinghy.
 # Dinghy HTTP Proxy
 
-[![Docker Automated build](https://img.shields.io/docker/automated/codekitchen/dinghy-http-proxy.svg)](https://hub.docker.com/r/codekitchen/dinghy-http-proxy/)
-
-This is the HTTP Proxy and DNS server that
-[Dinghy](https://github.com/codekitchen/dinghy) uses.
+This is an HTTP Proxy and DNS server that can be used for docker development originally part of the now deprecated [Dinghy](https://github.com/codekitchen/dinghy).
 
 The proxy is based on jwilder's excellent
 [nginx-proxy](https://github.com/jwilder/nginx-proxy) project, with
@@ -119,10 +114,7 @@ openssl req -x509 -newkey rsa:2048 -keyout foo.bar.com.docker.key \
 
 To prevent your browser to emit warning regarding self-signed certificates, you can install them on your system as trusted certificates.
 
-## Using Outside of Dinghy
-
-Since this functionality is generally useful for local development work even
-outside of Dinghy, this proxy now supports running standalone.
+## Using the proxy
 
 #### Environment variables
 
@@ -135,8 +127,8 @@ We include a few environment variables to customize the proxy / dns server:
 
 You'll need the IP of your VM:
 
-* For docker-machine, run `docker-machine ip <machine_name>` to get the IP.
-* For Docker for Mac, you can use `127.0.0.1` as the IP, since it forwards docker ports to the host machine.
+* For multipass, run `multipass ls` to get the IP.
+* For DockerDesktop, you can use `127.0.0.1` as the IP, since it forwards docker ports to the host machine.
 
 Then start the proxy:
 
@@ -145,8 +137,7 @@ Then start the proxy:
       -v ~/.dinghy/certs:/etc/nginx/certs \
       -p 80:80 -p 443:443 -p 19322:19322/udp \
       -e DNS_IP=<vm_ip> -e CONTAINER_NAME=http-proxy \
-      --name http-proxy \
-      codekitchen/dinghy-http-proxy
+      --name http-proxy ktgeek/dinghy-http-proxy
 
 You will also need to configure OS X to use the DNS resolver. To do this, create
 a file `/etc/resolver/docker` (creating the `/etc/resolver` directory if it does
@@ -170,8 +161,7 @@ the proxy:
       -v ~/.dinghy/certs:/etc/nginx/certs \
       -p 80:80 -p 443:443 -p 19322:19322/udp \
       -e CONTAINER_NAME=http-proxy \
-      --name http-proxy \
-      codekitchen/dinghy-http-proxy
+      --name http-proxy ktgeek/dinghy-http-proxy
 
 The `DNS_IP` environment variable is not necessary when Docker is running
 directly on the host, as it defaults to `127.0.0.1`.
@@ -191,8 +181,7 @@ docker run -d --restart=always `
   -p 80:80 -p 443:443 -p 19322:19322/udp `
   -e CONTAINER_NAME=http-proxy `
   -e DNS_IP=127.0.0.1 `
-  --name http-proxy `
-  codekitchen/dinghy-http-proxy
+  --name http-proxy ktgeek/dinghy-http-proxy
 ```
 
 From docker-compose:
@@ -202,7 +191,7 @@ services:
 
   http-proxy:
     container_name: http-proxy
-    image: codekitchen/dinghy-http-proxy
+    image: ktgeek/dinghy-http-proxy
     environment:
       - DNS_IP=127.0.0.1
       - CONTAINER_NAME=http-proxy
